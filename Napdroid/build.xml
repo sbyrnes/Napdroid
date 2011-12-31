@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="Napdroid" default="jar">
+    <!-- Compiler preferences -->
+    <property name="debug" value="false" />
+    <property name="verbose" value="false" />	
+    <property name="deprecation" value="false" />
+    <property name="optimize" value="false" />
+    <property name="encoding" value="ascii" />
+
+    <!-- Build Entites -->
+    <property name="target.class" value="./build/classes" />
+    <property name="target.jar" value="./bin/napdroid.jar" />
+	
+	<!-- Classpath - THIS SHOULD BE THE PATH TO YOUR ANDROID SDK LIB -->
+	<property name="android-jar" value="../lib/android-sdk-1.0.jar" />
+	
+	<!-- Source Files -->
+	<path id="src.path">
+		<pathelement location="./src"/>
+	</path>
+	
+    <!-- Clean -->
+    <target name="clean">
+        <delete dir="${target.class}" failonerror="false"/>
+    	<mkdir dir="${target.class}"/>
+    </target>
+
+    <!-- Compile -->
+    <target name="compile" depends="clean">
+    	<javac destdir="${target.class}"
+				encoding="${encoding}"
+				debug="${debug}"
+				verbose="${verbose}"
+				deprecation="${deprecation}"
+				optimize="${optimize}"
+    			bootclasspath="${android-jar}"
+    			target="${targetJavaVersion}">
+			<src refid="src.path"/>
+		</javac>
+     </target>
+
+    <!-- Build JAR -->
+	<target name="jar" depends="compile">	
+		<jar destfile="${target.jar}">
+			<fileset dir="${target.class}">
+				<exclude name="**/R*.class" />
+			</fileset>
+		</jar>
+		
+	</target>
+
+</project>
