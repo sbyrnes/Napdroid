@@ -4,15 +4,15 @@ A simple JSON / REST interface library for Android applications. Works with Andr
 
 Install
 -------
-Just copy the /bin/napdroid.jar file into your Android project and add it to your build path. 	
+Just copy the napdroid.jar file into your Android project and add it to your build path. 	
 	
-If you'd like to build it yourself, just load the project in Eclipse with the Android SDK installed and it will auto-generate the JAR file for you since the project is marked as a library.
+If you'd like to build it yourself, just load the project in Eclipse with the Android SDK installed and it will auto-generate the JAR file for you (in the /bin dir) since the project is marked as a library.
 
 For compilation outside of Eclipse, you can use the included Ant script.
 
 	ant build.xml
 
-This will build napdroid.jar. Be sure to specify the location of your Android SDK Jar in the build.xml file first.   
+This will build ./napdroid.jar. Be sure to specify the location of your Android SDK Jar in the build.xml file first.   
 
 Example without parameters
 --------------------------
