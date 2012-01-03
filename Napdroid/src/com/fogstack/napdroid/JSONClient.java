@@ -21,6 +21,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 /**
  * A JSON interface class, allowing simple retrieval of JSON content from REST APIs.
  * @author Sean Byrnes sean@fogstack.com
@@ -95,12 +97,12 @@ public class JSONClient {
         	int status  = response.getStatusLine().getStatusCode();
 			if(status != 200)
 			{
-				// TODO: Log bad status code
+				Log.e("HTTP Error", "Bad HTTP response code: " + status);
 			} else {	
 				results = readResponse(response);
 			}
 		} catch (Exception e) {
-			// TODO: Log network error
+			Log.e("Network Error", "A network error occurred", e);
 		} 
 		
 		return results;
@@ -127,12 +129,12 @@ public class JSONClient {
         	int status  = response.getStatusLine().getStatusCode();
 			if(status != 200)
 			{
-				// TODO: Log bad status code
+				Log.e("HTTP Error", "Bad HTTP response code: " + status);
 			} else {	
 				results = readResponse(response);
 			}
 		} catch (Exception e) {
-			// TODO: Log that network error occurred.
+			Log.e("Network Error", "A network error occurred", e);
 		} 
 		
 		return results;		
