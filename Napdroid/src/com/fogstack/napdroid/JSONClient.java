@@ -84,7 +84,7 @@ public class JSONClient {
         List<NameValuePair> nameValuePairs = buildNameValuePairs(parameters);
         
         String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
-        String queryURL = fRequestType + "?" +  paramString;
+        String queryURL = fHostUrl + "?" +  paramString;
         
         // Prepare a request object
         HttpGet httpget = new HttpGet(queryURL);
