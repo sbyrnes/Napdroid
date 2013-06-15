@@ -18,6 +18,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +31,9 @@ import android.util.Log;
  * @author Sean Byrnes sean@fogstack.com
  */
 public class JSONClient {
+	/** Default timeout is 5 seconds */
+	public static int DEFAULT_TIMEOUT = 5000; 
+	
 	/** Retrieve a JSON Client instance which will communicate with the given host. */
 	public static JSONClient getInstance(String hostURL) {
 		return new JSONClient(hostURL);
@@ -36,9 +42,14 @@ public class JSONClient {
 	public static JSONClient getInstance(String hostURL, JSONConnectionType connectionType) {
 		return new JSONClient(hostURL, connectionType);
 	}
+	/** Retrieve a JSON Client instance which will communicate with the given host using the specified request type and maintain the specific timeout. */
+	public static JSONClient getInstance(String hostURL, JSONConnectionType connectionType, int timeout) {
+		return new JSONClient(hostURL, connectionType, timeout);
+	}
 	
 	String fHostUrl;
 	JSONConnectionType fRequestType = JSONConnectionType.GET;
+	int fTimeout = DEFAULT_TIMEOUT;
 	
 	private JSONClient(String hostURL)
 	{
@@ -49,6 +60,13 @@ public class JSONClient {
 	{
 		fHostUrl = hostURL;
 		fRequestType = connectionType;
+	}
+	
+	private JSONClient(String hostURL, JSONConnectionType connectionType, int timeout)
+	{
+		fHostUrl = hostURL;
+		fRequestType = connectionType;
+		fTimeout = timeout;
 	}
 
 	/** Retrieves the JSON object resulting from a REST request. 
@@ -74,12 +92,27 @@ public class JSONClient {
 		return jObject;
 	}
 	
+	/**
+	 * Returns connection parameters for all HTTP connections.
+	 * @return
+	 */
+	private HttpParams getConnParams()
+	{
+		HttpParams httpParameters = new BasicHttpParams();
+		// Set timeout until connection is established.
+		HttpConnectionParams.setConnectionTimeout(httpParameters, fTimeout);
+		// Set the socket timeout which is how long it'll wait for data.
+		HttpConnectionParams.setSoTimeout(httpParameters, fTimeout);
+		
+		return httpParameters;
+	}
+	
 	/** Retrieves the raw content of a request using HTTP GET and the specified parameters. */
 	private String getViaGET(Map<String, String> parameters)
 	{
 		String results = null;
 		
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpclient = new DefaultHttpClient(getConnParams());
         
         List<NameValuePair> nameValuePairs = buildNameValuePairs(parameters);
         
@@ -113,7 +146,7 @@ public class JSONClient {
 	{
 		String results = null;
 		
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpclient = new DefaultHttpClient(getConnParams());
         
         List<NameValuePair> nameValuePairs = buildNameValuePairs(parameters);
         
